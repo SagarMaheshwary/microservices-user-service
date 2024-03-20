@@ -1,0 +1,16 @@
+syntax="proto3";
+
+package user;
+
+service UserService {
+  rpc FindById(UserById) returns (User) {}
+}
+
+message UserById {}
+
+message User {
+  int64 id = 1;
+  string name = 2;
+  string email = 3;
+  string image = 4;
+}
