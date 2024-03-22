@@ -1,7 +1,7 @@
-import { Exclude } from 'class-transformer';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Exclude, Transform } from "class-transformer";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity({ name: 'users' })
+@Entity({ name: "users" })
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
@@ -19,9 +19,11 @@ export class User {
   @Column()
   image: string;
 
+  @Transform(({ value }) => value.toISOString())
   @Column()
-  created_at: string;
+  created_at: Date;
 
+  @Transform(({ value }) => value?.toISOString())
   @Column()
-  updated_at: string;
+  updated_at: Date;
 }

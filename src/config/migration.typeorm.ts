@@ -1,8 +1,8 @@
-import { DataSource } from 'typeorm';
-import { config as configEnv } from 'dotenv';
-import appConfig from '.';
-import { CreateUsersTable1710958206638 } from '../database/migrations/1710958206638-create-users-table';
-import { POSTGRES } from '../constants/database';
+import { DataSource } from "typeorm";
+import { config as configEnv } from "dotenv";
+import appConfig from ".";
+import { CreateUsersTable1710958206638 } from "../database/migrations/1710958206638-create-users-table";
+import { POSTGRES } from "../constants/database";
 
 /**
  * CONFIG FILE USED WHEN RUNNING THE MIGRATIONS

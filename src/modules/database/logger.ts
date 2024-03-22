@@ -1,5 +1,5 @@
-import { AbstractLogger, LogLevel, LogMessage, QueryRunner } from 'typeorm';
-import { Logger as NestLogger } from '@nestjs/common';
+import { AbstractLogger, LogLevel, LogMessage, QueryRunner } from "typeorm";
+import { Logger as NestLogger } from "@nestjs/common";
 
 export class Logger extends AbstractLogger {
   protected writeLog(
@@ -11,18 +11,18 @@ export class Logger extends AbstractLogger {
       highlightSql: false,
     });
 
-    const logger = new NestLogger('TypeORM');
+    const logger = new NestLogger("TypeORM");
 
     for (let message of messages) {
       switch (message.type ?? level) {
-        case 'log':
-        case 'schema-build':
-        case 'migration':
+        case "log":
+        case "schema-build":
+        case "migration":
           logger.log(message.message);
           break;
 
-        case 'info':
-        case 'query':
+        case "info":
+        case "query":
           if (message.prefix) {
             logger.log(
               `${message.prefix.toLocaleUpperCase()} ${message.message}`,
@@ -32,8 +32,8 @@ export class Logger extends AbstractLogger {
           }
           break;
 
-        case 'warn':
-        case 'query-slow':
+        case "warn":
+        case "query-slow":
           if (message.prefix) {
             logger.warn(
               `${message.prefix.toLocaleUpperCase()} ${message.message}`,
@@ -43,8 +43,8 @@ export class Logger extends AbstractLogger {
           }
           break;
 
-        case 'error':
-        case 'query-error':
+        case "error":
+        case "query-error":
           if (message.prefix) {
             logger.error(
               `${message.prefix.toLocaleUpperCase()} ${message.message}`,

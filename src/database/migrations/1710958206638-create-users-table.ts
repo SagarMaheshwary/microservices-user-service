@@ -1,7 +1,7 @@
-import { MigrationInterface, QueryRunner, Table } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from "typeorm";
 
 export class CreateUsersTable1710958206638 implements MigrationInterface {
-  private tableName = 'users';
+  private tableName = "users";
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
@@ -9,44 +9,44 @@ export class CreateUsersTable1710958206638 implements MigrationInterface {
         name: this.tableName,
         columns: [
           {
-            name: 'id',
-            type: 'bigint',
+            name: "id",
+            type: "bigint",
             isPrimary: true,
             isGenerated: true,
           },
           {
-            name: 'name',
-            type: 'varchar',
-            length: '50',
+            name: "name",
+            type: "varchar",
+            length: "50",
             isNullable: false,
           },
           {
-            name: 'email',
-            type: 'varchar',
-            length: '255',
+            name: "email",
+            type: "varchar",
+            length: "255",
             isNullable: false,
             isUnique: true,
           },
           {
-            name: 'password',
-            type: 'varchar',
-            length: '255',
+            name: "password",
+            type: "varchar",
+            length: "255",
             isNullable: false,
           },
           {
-            name: 'image',
-            type: 'varchar',
-            length: '120',
+            name: "image",
+            type: "varchar",
+            length: "120",
             isNullable: true,
           },
           {
-            name: 'created_at',
-            type: 'timestamp',
-            default: 'NOW()',
+            name: "created_at",
+            type: "timestamp",
+            default: "NOW()",
           },
           {
-            name: 'updated_at',
-            type: 'timestamp',
+            name: "updated_at",
+            type: "timestamp",
             isNullable: true,
           },
         ],

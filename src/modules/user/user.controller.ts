@@ -1,17 +1,20 @@
-import { Metadata, ServerUnaryCall, status } from "@grpc/grpc-js";
-import { Controller, Inject, Logger } from "@nestjs/common";
+import { Metadata, ServerUnaryCall } from "@grpc/grpc-js";
+import { Controller, Inject, Logger, UseFilters } from "@nestjs/common";
 import { GrpcMethod, RpcException } from "@nestjs/microservices";
-import { User } from "./user.entity";
 import { UserService } from "./user.service";
 import { FindByIdRequest } from "../../proto/types/user/FindByIdRequest";
 import { FindByIdResponse } from "../../proto/types/user/FindByIdResponse";
 import { ResponseMessage } from "../../constants/common";
 import { FindByCredentialRequest } from "../../proto/types/user/FindByCredentialRequest";
+import { RpcExceptionFilter } from "../../exception-filters/rpc-exception.filter";
+import { FindByCredentialResponse } from "../../proto/types/user/FindByCredentialResponse";
+import { instanceToPlain } from "class-transformer";
 
 @Controller()
 export class UserController {
   constructor(@Inject(UserService) private readonly userService: UserService) {}
 
+  @UseFilters(new RpcExceptionFilter())
   @GrpcMethod("UserService", "FindById")
   async findById(
     data: FindByIdRequest,
@@ -24,31 +27,37 @@ export class UserController {
       return {
         message: ResponseMessage.OK,
         data: {
-          user,
+          user: instanceToPlain(user),
         },
       };
     } catch (err) {
-      let code = status.INTERNAL;
-      let message = ResponseMessage.INTERNAL_SERVER_ERROR;
-
-      if (err.name == "EntityNotFoundError") {
-        code = status.NOT_FOUND;
-        message = ResponseMessage.NOT_FOUND;
-      }
-
-      throw new RpcException({
-        code,
-        message,
-      });
+      Logger.error(err);
+      throw new RpcException(err);
     }
   }
 
+  @UseFilters(new RpcExceptionFilter())
   @GrpcMethod("UserService", "FindByCredential")
   async findByCredendial(
     data: FindByCredentialRequest,
     metadata: Metadata,
-    call: ServerUnaryCall<FindByCredentialRequest, FindByIdResponse>,
-  ) {
-    //
+    call: ServerUnaryCall<FindByCredentialRequest, FindByCredentialResponse>,
+  ): Promise<FindByCredentialResponse> {
+    try {
+      const user = await this.userService.findByCredential(
+        data.email,
+        data.password,
+      );
+
+      return {
+        message: ResponseMessage.OK,
+        data: {
+          user: instanceToPlain(user),
+        },
+      };
+    } catch (err) {
+      Logger.error(err);
+      throw new RpcException(err);
+    }
   }
 }
