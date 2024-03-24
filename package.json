@@ -1,10 +1,10 @@
 {
   "name": "user",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Microservices - User Service",
+  "author": "Sagar Maheshwary",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -17,7 +17,10 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "migration:create": "typeorm migration:create",
+    "migration:run": "npm run build && typeorm migration:run -d dist/config/migration.typeorm.js",
+    "migration:revert": "npm run build && typeorm migration:revert -d dist/config/migration.typeorm.js"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.10.3",
@@ -27,6 +30,7 @@
     "@nestjs/core": "^9.0.0",
     "@nestjs/microservices": "^9.4.3",
     "@nestjs/platform-express": "^9.0.0",
+    "bcrypt": "^5.1.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "pg": "^8.11.3",
@@ -38,6 +42,7 @@
     "@nestjs/cli": "^9.0.0",
     "@nestjs/schematics": "^9.0.0",
     "@nestjs/testing": "^9.0.0",
+    "@types/bcrypt": "^5.0.2",
     "@types/express": "^4.17.13",
     "@types/jest": "29.5.0",
     "@types/node": "18.15.11",
@@ -48,6 +53,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "29.5.0",
+    "nestjs-proto-gen-ts": "^1.0.21",
     "prettier": "^2.3.2",
     "source-map-support": "^0.5.20",
     "supertest": "^6.1.3",
