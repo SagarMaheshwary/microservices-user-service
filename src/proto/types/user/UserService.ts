@@ -18,6 +18,14 @@ import type {
   FindByIdResponse as _user_FindByIdResponse,
   FindByIdResponse__Output as _user_FindByIdResponse__Output,
 } from "../user/FindByIdResponse";
+import type {
+  StoreRequest as _user_StoreRequest,
+  StoreRequest__Output as _user_StoreRequest__Output,
+} from "../user/StoreRequest";
+import type {
+  StoreResponse as _user_StoreResponse,
+  StoreResponse__Output as _user_StoreResponse__Output,
+} from "../user/StoreResponse";
 
 export interface UserServiceClient extends grpc.Client {
   FindByCredential(
@@ -101,6 +109,47 @@ export interface UserServiceClient extends grpc.Client {
     argument: _user_FindByIdRequest,
     callback: grpc.requestCallback<_user_FindByIdResponse__Output>,
   ): grpc.ClientUnaryCall;
+
+  Store(
+    argument: _user_StoreRequest,
+    metadata: grpc.Metadata,
+    options: grpc.CallOptions,
+    callback: grpc.requestCallback<_user_StoreResponse__Output>,
+  ): grpc.ClientUnaryCall;
+  Store(
+    argument: _user_StoreRequest,
+    metadata: grpc.Metadata,
+    callback: grpc.requestCallback<_user_StoreResponse__Output>,
+  ): grpc.ClientUnaryCall;
+  Store(
+    argument: _user_StoreRequest,
+    options: grpc.CallOptions,
+    callback: grpc.requestCallback<_user_StoreResponse__Output>,
+  ): grpc.ClientUnaryCall;
+  Store(
+    argument: _user_StoreRequest,
+    callback: grpc.requestCallback<_user_StoreResponse__Output>,
+  ): grpc.ClientUnaryCall;
+  store(
+    argument: _user_StoreRequest,
+    metadata: grpc.Metadata,
+    options: grpc.CallOptions,
+    callback: grpc.requestCallback<_user_StoreResponse__Output>,
+  ): grpc.ClientUnaryCall;
+  store(
+    argument: _user_StoreRequest,
+    metadata: grpc.Metadata,
+    callback: grpc.requestCallback<_user_StoreResponse__Output>,
+  ): grpc.ClientUnaryCall;
+  store(
+    argument: _user_StoreRequest,
+    options: grpc.CallOptions,
+    callback: grpc.requestCallback<_user_StoreResponse__Output>,
+  ): grpc.ClientUnaryCall;
+  store(
+    argument: _user_StoreRequest,
+    callback: grpc.requestCallback<_user_StoreResponse__Output>,
+  ): grpc.ClientUnaryCall;
 }
 
 export interface UserServiceHandlers extends grpc.UntypedServiceImplementation {
@@ -113,6 +162,8 @@ export interface UserServiceHandlers extends grpc.UntypedServiceImplementation {
     _user_FindByIdRequest__Output,
     _user_FindByIdResponse
   >;
+
+  Store: grpc.handleUnaryCall<_user_StoreRequest__Output, _user_StoreResponse>;
 }
 
 export interface UserServiceDefinition extends grpc.ServiceDefinition {
@@ -127,5 +178,11 @@ export interface UserServiceDefinition extends grpc.ServiceDefinition {
     _user_FindByIdResponse,
     _user_FindByIdRequest__Output,
     _user_FindByIdResponse__Output
+  >;
+  Store: MethodDefinition<
+    _user_StoreRequest,
+    _user_StoreResponse,
+    _user_StoreRequest__Output,
+    _user_StoreResponse__Output
   >;
 }

@@ -3,11 +3,14 @@ import { Repository } from "typeorm";
 import { User } from "./user.entity";
 import { USER_REPOSITORY } from "../../constants/database";
 import { compare, hash } from "bcrypt";
+import { StoreRequest } from "../../proto/types/user/StoreRequest";
+import { ConfigService } from "@nestjs/config";
 
 @Injectable()
 export class UserService {
   constructor(
     @Inject(USER_REPOSITORY) private readonly userRepository: Repository<User>,
+    @Inject(ConfigService) private readonly configService: ConfigService,
   ) {}
 
   public async findById(id: number): Promise<User> {
@@ -29,5 +32,21 @@ export class UserService {
 
   public async findByEmail(email: string): Promise<User> {
     return await this.userRepository.findOneByOrFail({ email });
+  }
+
+  public async store(user: StoreRequest): Promise<User> {
+    const rounds = this.configService.get("hash.rounds");
+
+    const password = await hash(user.password, rounds);
+
+    const newUser = await this.userRepository.save(
+      {
+        ...user,
+        password,
+      },
+      { transaction: false },
+    );
+
+    return await this.findById(newUser.id);
   }
 }

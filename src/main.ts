@@ -4,6 +4,7 @@ import { MicroserviceOptions, Transport } from "@nestjs/microservices";
 import { join } from "path";
 import { Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
+import { useContainer } from "class-validator";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -24,6 +25,10 @@ async function bootstrap() {
         keepCase: true,
       },
     },
+  });
+
+  useContainer(app.select(AppModule), {
+    fallbackOnErrors: true,
   });
 
   await app.startAllMicroservices();

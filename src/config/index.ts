@@ -13,4 +13,7 @@ export default () => ({
     port: parseInt(getEnv("DB_PORT")),
     logging: parseInt(getEnv("DB_LOGGING")),
   },
+  hash: {
+    rounds: getEnv("HASH_ROUNDS", 10),
+  },
 });

@@ -21,6 +21,9 @@ export interface ProtoGrpcType {
     FindByIdRequest: MessageTypeDefinition;
     FindByIdResponse: MessageTypeDefinition;
     FindByIdResponseData: MessageTypeDefinition;
+    StoreRequest: MessageTypeDefinition;
+    StoreResponse: MessageTypeDefinition;
+    StoreResponseData: MessageTypeDefinition;
     User: MessageTypeDefinition;
     UserService: SubtypeConstructor<
       typeof grpc.Client,
