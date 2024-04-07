@@ -6,6 +6,10 @@ import { Test } from "@nestjs/testing";
 import { User } from "./user.entity";
 import { UnauthorizedException } from "@nestjs/common";
 import { RpcException } from "@nestjs/microservices";
+import { plainToInstance } from "class-transformer";
+import { StoreRequestDTO } from "./dto/store-request.dto";
+import { useContainer, validate } from "class-validator";
+import { AppModule } from "../../app.module";
 
 describe("UserController", () => {
   let userController: UserController;
@@ -27,6 +31,13 @@ describe("UserController", () => {
       }
 
       return mockUser;
+    }),
+    store: jest.fn((dto) => {
+      return {
+        ...mockUser,
+        name: dto.name,
+        email: dto.email,
+      };
     }),
   };
 
@@ -132,6 +143,27 @@ describe("UserController", () => {
           ExceptionType.UNAUTHORIZED_EXCEPTION,
         );
       }
+    });
+  });
+
+  describe("Store", () => {
+    it("should create a user", async () => {
+      const dto = {
+        name: "Daniel",
+        email: "daniel@gmail.com",
+        password: "password123",
+      };
+
+      expect(await userController.store(dto)).toEqual({
+        message: ResponseMessage.CREATED,
+        data: {
+          user: {
+            ...mockUser,
+            name: dto.name,
+            email: dto.email,
+          },
+        },
+      });
     });
   });
 });
