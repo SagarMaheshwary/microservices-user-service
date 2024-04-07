@@ -28,11 +28,7 @@ export class UserController {
   constructor(@Inject(UserService) private readonly userService: UserService) {}
 
   @GrpcMethod("UserService", "FindById")
-  async findById(
-    data: FindByIdRequest,
-    metadata: Metadata,
-    call: ServerUnaryCall<FindByIdRequest, FindByIdResponse>,
-  ): Promise<FindByIdResponse> {
+  async findById(data: FindByIdRequest): Promise<FindByIdResponse> {
     try {
       const user = await this.userService.findById(data.id);
 
@@ -51,8 +47,6 @@ export class UserController {
   @GrpcMethod("UserService", "FindByCredential")
   async findByCredendial(
     data: FindByCredentialRequestDTO,
-    metadata: Metadata,
-    call: ServerUnaryCall<FindByCredentialRequest, FindByCredentialResponse>,
   ): Promise<FindByCredentialResponse> {
     try {
       const user = await this.userService.findByCredential(
@@ -73,11 +67,7 @@ export class UserController {
   }
 
   @GrpcMethod("UserService", "Store")
-  async store(
-    data: StoreRequestDTO,
-    metadata: Metadata,
-    call: ServerUnaryCall<StoreRequest, StoreResponse>,
-  ): Promise<StoreResponse> {
+  async store(data: StoreRequestDTO): Promise<StoreResponse> {
     try {
       const user = await this.userService.store(data);
 

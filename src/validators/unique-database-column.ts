@@ -4,7 +4,7 @@ import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from "class-validator";
-import { DATA_SOURCE } from "src/constants/database";
+import { DATA_SOURCE } from "../constants/database";
 import { DataSource } from "typeorm";
 
 /**
