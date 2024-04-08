@@ -2,15 +2,14 @@ import { Inject, Injectable, UnauthorizedException } from "@nestjs/common";
 import { Repository } from "typeorm";
 import { User } from "./user.entity";
 import { USER_REPOSITORY } from "../../constants/database";
-import { compare, hash } from "bcrypt";
 import { StoreRequest } from "../../proto/types/user/StoreRequest";
-import { ConfigService } from "@nestjs/config";
+import { Hash } from "../../lib/hash";
 
 @Injectable()
 export class UserService {
   constructor(
     @Inject(USER_REPOSITORY) private readonly userRepository: Repository<User>,
-    @Inject(ConfigService) private readonly configService: ConfigService,
+    @Inject(Hash) private readonly hash: Hash,
   ) {}
 
   public async findById(id: number): Promise<User> {
@@ -23,7 +22,7 @@ export class UserService {
   ): Promise<User> {
     const user = await this.findByEmail(email);
 
-    if (!(await compare(password, user.password))) {
+    if (!(await this.hash.compare(password, user.password))) {
       throw new UnauthorizedException();
     }
 
@@ -35,9 +34,7 @@ export class UserService {
   }
 
   public async store(user: StoreRequest): Promise<User> {
-    const rounds = this.configService.get("hash.rounds");
-
-    const password = await hash(user.password, rounds);
+    const password = await this.hash.make(user.password);
 
     const newUser = await this.userRepository.save(
       {
