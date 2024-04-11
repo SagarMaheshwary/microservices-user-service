@@ -1,4 +1,3 @@
-import { Metadata, ServerUnaryCall } from "@grpc/grpc-js";
 import {
   Controller,
   Inject,
@@ -12,17 +11,23 @@ import { UserService } from "./user.service";
 import { FindByIdRequest } from "../../proto/types/user/FindByIdRequest";
 import { FindByIdResponse } from "../../proto/types/user/FindByIdResponse";
 import { ResponseMessage } from "../../constants/common";
-import { FindByCredentialRequest } from "../../proto/types/user/FindByCredentialRequest";
 import { RpcExceptionFilter } from "../../exception-filters/rpc-exception.filter";
 import { FindByCredentialResponse } from "../../proto/types/user/FindByCredentialResponse";
 import { instanceToPlain } from "class-transformer";
-import { StoreRequest } from "../../proto/types/user/StoreRequest";
 import { StoreResponse } from "../../proto/types/user/StoreResponse";
 import { StoreRequestDTO } from "./dto/store-request.dto";
 import { FindByCredentialRequestDTO } from "./dto/find-by-credential-request.dto";
+import { exceptionFactory } from "../../helpers/validation";
 
 @Controller()
-@UsePipes(new ValidationPipe({ transform: true }))
+@UsePipes(
+  new ValidationPipe({
+    transform: true,
+    exceptionFactory(errors) {
+      exceptionFactory(errors);
+    },
+  }),
+)
 @UseFilters(new RpcExceptionFilter())
 export class UserController {
   constructor(@Inject(UserService) private readonly userService: UserService) {}
@@ -39,7 +44,6 @@ export class UserController {
         },
       };
     } catch (err) {
-      Logger.error(err);
       throw new RpcException(err);
     }
   }
@@ -61,7 +65,6 @@ export class UserController {
         },
       };
     } catch (err) {
-      Logger.error(err);
       throw new RpcException(err);
     }
   }
@@ -78,7 +81,6 @@ export class UserController {
         },
       };
     } catch (err) {
-      Logger.error(err);
       throw new RpcException(err);
     }
   }

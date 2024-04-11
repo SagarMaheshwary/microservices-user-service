@@ -1,35 +1,27 @@
 import { status } from "@grpc/grpc-js";
-import {
-  ExceptionFilter,
-  Catch,
-  ArgumentsHost,
-  HttpException,
-} from "@nestjs/common";
+import { ExceptionFilter, Catch, ArgumentsHost, Logger } from "@nestjs/common";
 import { RpcException } from "@nestjs/microservices";
 import { ExceptionType, ResponseMessage } from "../constants/common";
 import { throwError } from "rxjs";
 
-@Catch(RpcException, HttpException)
+@Catch(RpcException)
 export class RpcExceptionFilter implements ExceptionFilter {
-  catch(exception: RpcException | HttpException, host: ArgumentsHost) {
-    let exceptionName = null;
-    let exceptionData = null;
+  catch(exception: RpcException, host: ArgumentsHost) {
+    const error = exception.getError() as any;
 
-    if (exception instanceof RpcException) {
-      exceptionName = (exception.getError() as any).name;
-    } else {
-      exceptionName = exception.name;
-      exceptionData = (exception.getResponse() as any).message;
-    }
+    const exceptionName = error.name;
+    const exceptionData = error.errors ? JSON.stringify(error.errors) : null;
 
     const [code, message] = this.mapExceptionFields(exceptionName);
+
+    Logger.error(
+      `Exception: "${exceptionName}" Status: "${code}" Message: "${message}"`,
+    );
 
     return throwError(() => ({
       code,
       message,
-      details: Array.isArray(exceptionData)
-        ? exceptionData.join("|")
-        : exceptionData,
+      details: exceptionData,
     }));
   }
 
