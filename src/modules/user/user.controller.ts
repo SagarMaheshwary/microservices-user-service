@@ -23,6 +23,7 @@ import { exceptionFactory } from "../../helpers/validation";
 @UsePipes(
   new ValidationPipe({
     transform: true,
+    stopAtFirstError: true,
     exceptionFactory(errors) {
       exceptionFactory(errors);
     },
