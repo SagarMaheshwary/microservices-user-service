@@ -4,10 +4,10 @@ This service is a part of the Microservices project built for handling "user" re
 
 ### TECHNOLOGIES
 
-- NestJS
+- NestJS (9.0)
 - gRPC
-- PostgreSQL
-- TypeORM
+- PostgreSQL (14)
+- TypeORM (0.3.20)
 
 ### SETUP
 
@@ -25,7 +25,11 @@ Create tables with TypeORM migrations: (migrations config is defined in **src/co
 npm run migration:run
 ```
 
-You can also revert the migrations with **migration:revert**
+Below command can be used to revert the migrations:
+
+```bash
+npm run migration:revert
+```
 
 Create build:
 
@@ -49,8 +53,8 @@ npm run start:dev
 
 Proto files are stored in **src/proto** directory.
 
-| SERVICE     | RPC              | DESCRIPTION                                      | USECASE                                                |
-| ----------- | ---------------- | ------------------------------------------------ | ------------------------------------------------------ |
-| UserService | Store            | Create user                                      | Used by authentication service for user registration   |
-| UserService | FindById         | Find user by id                                  | Common RPC (Currently used by authentication service ) |
-| UserService | FindByCredential | Find user by email and verify the given password | Used by authentication service for user login          |
+| SERVICE     | RPC              | DESCRIPTION                                                                                                                                  |
+| ----------- | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| UserService | Store            | Create user, used by [authentication service](https://github.com/SagarMaheshwary/microservices-authentication-service) for user registration |
+| UserService | FindById         | Find user by id, used by authentication service                                                                                              |
+| UserService | FindByCredential | Find user by email and verify the given password, used by authentication service for user login                                              |
