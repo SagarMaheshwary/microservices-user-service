@@ -9,7 +9,7 @@ import { POSTGRES } from "../constants/database";
  * ------------------------------------------------------------------------
  *
  * Create migration:
- * npm migration:create src/database/migrations/cmigration-file-name
+ * npm migration:create src/database/migrations/migration-file-name
  *
  * Run/revert migrations:
  * npm run migration:run

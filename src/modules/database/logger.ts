@@ -1,19 +1,15 @@
-import { AbstractLogger, LogLevel, LogMessage, QueryRunner } from "typeorm";
+import { AbstractLogger, LogLevel, LogMessage } from "typeorm";
 import { Logger as NestLogger } from "@nestjs/common";
 
 export class Logger extends AbstractLogger {
-  protected writeLog(
-    level: LogLevel,
-    logMessage: LogMessage | LogMessage[],
-    queryRunner?: QueryRunner,
-  ) {
+  protected writeLog(level: LogLevel, logMessage: LogMessage | LogMessage[]) {
     const messages = this.prepareLogMessages(logMessage, {
       highlightSql: false,
     });
 
     const logger = new NestLogger("TypeORM");
 
-    for (let message of messages) {
+    for (const message of messages) {
       switch (message.type ?? level) {
         case "log":
         case "schema-build":

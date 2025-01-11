@@ -2,8 +2,8 @@ import { RpcException } from "@nestjs/microservices";
 import { ValidationError } from "class-validator";
 import { ExceptionType } from "../constants/common";
 
-export const exceptionFactory = (errors: ValidationError[]) => {
-  let _errors = {};
+export const transformErrors = (errors: ValidationError[]) => {
+  const _errors = {};
 
   Object.keys(errors[0].target).forEach((key) => (_errors[key] = []));
 

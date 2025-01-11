@@ -17,7 +17,7 @@ import { instanceToPlain } from "class-transformer";
 import { StoreResponse } from "../../proto/types/user/StoreResponse";
 import { StoreRequestDTO } from "./dto/store-request.dto";
 import { FindByCredentialRequestDTO } from "./dto/find-by-credential-request.dto";
-import { exceptionFactory } from "../../helpers/validation";
+import { transformErrors } from "../../helpers/validation";
 
 @Controller()
 @UsePipes(
@@ -25,12 +25,16 @@ import { exceptionFactory } from "../../helpers/validation";
     transform: true,
     stopAtFirstError: true,
     exceptionFactory(errors) {
-      exceptionFactory(errors);
+      transformErrors(errors);
     },
   }),
 )
 @UseFilters(new RpcExceptionFilter())
 export class UserController {
+  private readonly logger = new Logger(UserController.name, {
+    timestamp: true,
+  });
+
   constructor(@Inject(UserService) private readonly userService: UserService) {}
 
   @GrpcMethod("UserService", "FindById")
@@ -45,6 +49,10 @@ export class UserController {
         },
       };
     } catch (err) {
+      this.logger.error(
+        `Error in ${UserController.name}::${this.findById.name}: "${err.message}"`,
+      );
+
       throw new RpcException(err);
     }
   }
@@ -66,6 +74,10 @@ export class UserController {
         },
       };
     } catch (err) {
+      this.logger.error(
+        `Error in ${UserController.name}::${this.findByCredendial.name}: "${err.message}"`,
+      );
+
       throw new RpcException(err);
     }
   }
@@ -82,6 +94,10 @@ export class UserController {
         },
       };
     } catch (err) {
+      this.logger.error(
+        `Error in ${UserController.name}::${this.store.name}: "${err.message}"`,
+      );
+
       throw new RpcException(err);
     }
   }

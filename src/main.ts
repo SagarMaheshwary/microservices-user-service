@@ -13,14 +13,18 @@ async function bootstrap() {
 
   const configService = app.get<ConfigService>(ConfigService);
 
+  const host = configService.get("grpc.host");
+  const port = configService.get("grpc.port");
+
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.GRPC,
     options: {
-      package: "user",
-      protoPath: join(__dirname, "proto/user.proto"),
-      url: `${configService.get("grpc.host")}:${configService.get(
-        "grpc.port",
-      )}`,
+      package: ["user", "grpc.health.v1"],
+      protoPath: [
+        join(__dirname, "proto/user.proto"),
+        join(__dirname, "proto/health.proto"),
+      ],
+      url: `${host}:${port}`,
       loader: {
         keepCase: true,
       },

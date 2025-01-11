@@ -1,5 +1,3 @@
-import { getEnv } from "../helpers/common";
-
 export default () => ({
   grpc: {
     host: <string>getEnv("GRPC_HOST"),
@@ -17,3 +15,7 @@ export default () => ({
     rounds: getEnv("HASH_ROUNDS", 10),
   },
 });
+
+const getEnv = (key: string, defaultVal: any = null) => {
+  return process.env[key] || defaultVal;
+};

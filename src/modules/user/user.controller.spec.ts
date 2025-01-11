@@ -6,14 +6,9 @@ import { Test } from "@nestjs/testing";
 import { User } from "./user.entity";
 import { UnauthorizedException } from "@nestjs/common";
 import { RpcException } from "@nestjs/microservices";
-import { plainToInstance } from "class-transformer";
-import { StoreRequestDTO } from "./dto/store-request.dto";
-import { useContainer, validate } from "class-validator";
-import { AppModule } from "../../app.module";
 
 describe("UserController", () => {
   let userController: UserController;
-  let userService: UserService;
 
   const mockUserService = {
     findById: jest.fn((id) => {
@@ -58,7 +53,6 @@ describe("UserController", () => {
       .useValue(mockUserService)
       .compile();
 
-    userService = moduleRef.get<UserService>(UserService);
     userController = moduleRef.get<UserController>(UserController);
   });
 
