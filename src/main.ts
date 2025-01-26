@@ -13,8 +13,13 @@ async function bootstrap() {
 
   const configService = app.get<ConfigService>(ConfigService);
 
-  const host = configService.get("grpc.host");
-  const port = configService.get("grpc.port");
+  const metricsHost = configService.get("prometheus.metricsHost");
+  const metricsPort = configService.get("prometheus.metricsPort");
+
+  await app.listen(metricsPort, metricsHost);
+
+  const grpcHost = configService.get("grpc.host");
+  const grpcPort = configService.get("grpc.port");
 
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.GRPC,
@@ -24,7 +29,7 @@ async function bootstrap() {
         join(__dirname, "proto/user.proto"),
         join(__dirname, "proto/health.proto"),
       ],
-      url: `${host}:${port}`,
+      url: `${grpcHost}:${grpcPort}`,
       loader: {
         keepCase: true,
       },

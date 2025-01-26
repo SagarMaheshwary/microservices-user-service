@@ -14,6 +14,10 @@ export default () => ({
   hash: {
     rounds: getEnv("HASH_ROUNDS", 10),
   },
+  prometheus: {
+    metricsHost: <string>getEnv("PROMETHEUS_METRICS_HOST", "localhost"),
+    metricsPort: parseInt(getEnv("PROMETHEUS_METRICS_PORT", 5010)),
+  },
 });
 
 const getEnv = (key: string, defaultVal: any = null) => {

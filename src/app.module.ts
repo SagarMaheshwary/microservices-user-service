@@ -4,6 +4,7 @@ import config from "./config";
 import { DatabaseModule } from "./modules/database/database.module";
 import { UserModule } from "./modules/user/user.module";
 import { HealthModule } from "./modules/health/health.module";
+import { PrometheusModule } from "./modules/prometheus/prometheus.module";
 
 @Module({
   imports: [
@@ -14,8 +15,7 @@ import { HealthModule } from "./modules/health/health.module";
     DatabaseModule,
     UserModule,
     HealthModule,
+    PrometheusModule,
   ],
-  controllers: [],
-  providers: [],
 })
 export class AppModule {}
