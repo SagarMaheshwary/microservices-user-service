@@ -1,6 +1,6 @@
 # MICROSERVICES - USER SERVICE
 
-This service is a part of the Microservices project built for handling "user" related operations.
+User Service for the [Microservices](https://github.com/SagarMaheshwary/microservices) project.
 
 ### TECHNOLOGIES
 
