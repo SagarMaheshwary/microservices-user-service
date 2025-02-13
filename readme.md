@@ -4,57 +4,29 @@ This service is a part of the Microservices project built for handling "user" re
 
 ### TECHNOLOGIES
 
-- NestJS (9.0)
-- gRPC
-- PostgreSQL (14)
-- TypeORM (0.3.20)
+- NestJS (Typescript)
+- gRPC – Serves as the main server for inter-service communication
+- PostgreSQL – Stores user data
+- TypeORM – ORM (Object-Relational Mapper) for PostgreSQL
+- Prometheus Client – Exports default and custom metrics for Prometheus server monitoring
 
 ### SETUP
 
-cd into the cloned project directory and install dependencies:
+Follow the instructions in the [README](https://github.com/SagarMaheshwary/microservices?tab=readme-ov-file#setup) of the main microservices repository to run this service along with others using Docker Compose.
 
-```bash
-npm install
-```
+### APIs (gRPC)
 
-Copy **.env.example** to **.env** and update the required variables.
+Proto files are located in the **src/proto** directory.
 
-Create tables with TypeORM migrations: (migrations config is defined in **src/config/migrations.typeorm.ts**)
+| SERVICE     | RPC              | DESCRIPTION                                                                                                                 |
+| ----------- | ---------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| UserService | Store            | Create user                                                                                                                 |
+| UserService | FindById         | Find user by id                                                                                                             |
+| UserService | FindByCredential | Find user by email and verify the given password, used by authentication service for user login                             |
+| Health      | Check            | Custom service health check implementation, similar to [grpc-golang](https://google.golang.org/grpc/health/grpc_health_v1). |
 
-```bash
-npm run migration:run
-```
+### APIs (REST)
 
-Below command can be used to revert the migrations:
-
-```bash
-npm run migration:revert
-```
-
-Create build:
-
-```bash
-npm run build
-```
-
-Start the server for listening to incoming requests:
-
-```bash
-npm run start:prod
-```
-
-Or run in development mode:
-
-```bash
-npm run start:dev
-```
-
-### APIs (RPC)
-
-Proto files are stored in **src/proto** directory.
-
-| SERVICE     | RPC              | DESCRIPTION                                                                                                                                  |
-| ----------- | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| UserService | Store            | Create user, used by [authentication service](https://github.com/SagarMaheshwary/microservices-authentication-service) for user registration |
-| UserService | FindById         | Find user by id, used by authentication service                                                                                              |
-| UserService | FindByCredential | Find user by email and verify the given password, used by authentication service for user login                                              |
+| API      | METHOD | BODY | Headers | Description                 |
+| -------- | ------ | ---- | ------- | --------------------------- |
+| /metrics | GET    | -    | -       | Prometheus metrics endpoint |
