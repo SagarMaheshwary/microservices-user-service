@@ -13,10 +13,10 @@ async function bootstrap() {
 
   const configService = app.get<ConfigService>(ConfigService);
 
-  const metricsHost = configService.get("prometheus.metricsHost");
-  const metricsPort = configService.get("prometheus.metricsPort");
-
-  await app.listen(metricsPort, metricsHost);
+  await app.listen(
+    configService.get("prometheus.port"),
+    configService.get("prometheus.host"),
+  );
 
   const grpcHost = configService.get("grpc.host");
   const grpcPort = configService.get("grpc.port");

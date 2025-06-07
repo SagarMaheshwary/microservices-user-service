@@ -6,9 +6,10 @@ import { ServingStatus } from "src/proto/types/grpc/health/v1/ServingStatus";
 import { getKeyByValue } from "src/helpers/common";
 import { GrpcInterceptor } from "src/interceptors/grpc.interceptor";
 import { PrometheusService } from "../prometheus/prometheus.service";
+import { GrpcJaegerInterceptor } from "../../interceptors/grpc-jaeger.interceptor";
 
 @Controller()
-@UseInterceptors(GrpcInterceptor)
+@UseInterceptors(GrpcInterceptor, GrpcJaegerInterceptor)
 export class HealthController {
   private readonly logger = new Logger(HealthController.name, {
     timestamp: true,

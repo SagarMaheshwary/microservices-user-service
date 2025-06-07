@@ -19,7 +19,8 @@ import { StoreResponse } from "../../proto/types/user/StoreResponse";
 import { StoreRequestDTO } from "./dto/store-request.dto";
 import { FindByCredentialRequestDTO } from "./dto/find-by-credential-request.dto";
 import { transformErrors } from "../../helpers/validation";
-import { GrpcInterceptor } from "src/interceptors/grpc.interceptor";
+import { GrpcInterceptor } from "../../interceptors/grpc.interceptor";
+import { GrpcJaegerInterceptor } from "../../interceptors/grpc-jaeger.interceptor";
 
 @Controller()
 @UsePipes(
@@ -32,7 +33,7 @@ import { GrpcInterceptor } from "src/interceptors/grpc.interceptor";
   }),
 )
 @UseFilters(new RpcExceptionFilter())
-@UseInterceptors(GrpcInterceptor)
+@UseInterceptors(GrpcInterceptor, GrpcJaegerInterceptor)
 export class UserController {
   private readonly logger = new Logger(UserController.name, {
     timestamp: true,

@@ -7,6 +7,7 @@ import { HealthModule } from "./modules/health/health.module";
 import { PrometheusModule } from "./modules/prometheus/prometheus.module";
 import { existsSync } from "fs";
 import { join } from "path";
+import { JaegerModule } from "./modules/jaeger/jaeger.module";
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { join } from "path";
     UserModule,
     HealthModule,
     PrometheusModule,
+    JaegerModule,
   ],
 })
 export class AppModule {}

@@ -15,3 +15,5 @@ export enum ExceptionType {
   FORBIDDEN_EXCEPTION = "ForbiddenException",
   BAD_REQUEST_EXCEPTION = "BadRequestException",
 }
+
+export const ServiceName = "User Service";
