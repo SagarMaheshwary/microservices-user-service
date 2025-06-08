@@ -15,8 +15,8 @@ export default () => ({
     rounds: getEnv("HASH_ROUNDS", 10),
   },
   prometheus: {
-    metricsHost: <string>getEnv("PROMETHEUS_HOST", "localhost"),
-    metricsPort: parseInt(getEnv("PROMETHEUS_PORT", 5010)),
+    host: <string>getEnv("PROMETHEUS_HOST", "localhost"),
+    port: parseInt(getEnv("PROMETHEUS_PORT", 5010)),
   },
   jaeger: {
     url: <string>getEnv("JAEGER_URL", "localhost:4318"),

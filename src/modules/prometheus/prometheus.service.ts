@@ -10,9 +10,9 @@ import {
 @Injectable()
 export class PrometheusService {
   private readonly register: Registry;
-  private readonly grpcRequestCounter: Counter;
-  private readonly grpcRequestLatency: Histogram;
-  private readonly serviceHealth: Gauge;
+  public readonly grpcRequestCounter: Counter;
+  public readonly grpcRequestDuration: Histogram;
+  public readonly serviceHealth: Gauge;
 
   constructor() {
     this.register = new Registry();
@@ -26,9 +26,9 @@ export class PrometheusService {
       registers: [this.register],
     });
 
-    this.grpcRequestLatency = new Histogram({
-      name: "grpc_request_latency_seconds",
-      help: "Latency of gRPC requests in seconds",
+    this.grpcRequestDuration = new Histogram({
+      name: "grpc_request_duration_seconds",
+      help: "Histogram of gRPC request durations in seconds.",
       labelNames: ["method"],
       registers: [this.register],
     });
@@ -42,20 +42,5 @@ export class PrometheusService {
 
   public async getMetrics(): Promise<string> {
     return this.register.metrics();
-  }
-
-  public incrementGRPCRequestCounter(serviceName: string, status: string) {
-    this.grpcRequestCounter.labels(serviceName, status).inc();
-  }
-
-  public addGRPCRequestLatencyToHistogram(
-    serviceName: string,
-    duration: number,
-  ) {
-    this.grpcRequestLatency.labels(serviceName).observe(duration);
-  }
-
-  public updateServiceHealthGuage(status: number) {
-    this.serviceHealth.set(status);
   }
 }

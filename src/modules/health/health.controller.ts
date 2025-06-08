@@ -31,12 +31,12 @@ export class HealthController {
       );
 
       if (status === ServingStatus.NOT_SERVING) {
-        this.prometheusService.updateServiceHealthGuage(0);
+        this.prometheusService.serviceHealth.set(0);
 
         return { status };
       }
 
-      this.prometheusService.updateServiceHealthGuage(1);
+      this.prometheusService.serviceHealth.set(1);
 
       return { status };
     } catch (err) {

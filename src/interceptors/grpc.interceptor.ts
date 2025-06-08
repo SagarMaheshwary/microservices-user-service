@@ -8,7 +8,7 @@ import {
 } from "@nestjs/common";
 import { Observable } from "rxjs";
 import { tap } from "rxjs/operators";
-import { getKeyByValue } from "src/helpers/common";
+import { convertHttpExceptionToGrpc, getKeyByValue } from "src/helpers/common";
 import { PrometheusService } from "src/modules/prometheus/prometheus.service";
 
 @Injectable()
@@ -24,28 +24,26 @@ export class GrpcInterceptor implements NestInterceptor {
     const handlerName = context.getHandler().name;
     const serviceName = context.getClass().name;
 
+    const label = `${serviceName}.${handlerName}`;
+
+    const recordMetrics = (code: number) => {
+      const grpcStatus = getKeyByValue(status, code);
+      const duration = (Date.now() - now) / 1000;
+
+      this.prometheusService.grpcRequestCounter.labels(label, grpcStatus).inc();
+      this.prometheusService.grpcRequestDuration
+        .labels(label)
+        .observe(duration);
+    };
+
     return next.handle().pipe(
       tap({
-        next: () => {
-          this.prometheusService.incrementGRPCRequestCounter(
-            `${serviceName}.${handlerName}`,
-            getKeyByValue(status, status.OK),
-          );
-          this.prometheusService.addGRPCRequestLatencyToHistogram(
-            `${serviceName}.${handlerName}`,
-            (Date.now() - now) / 1000,
-          );
-        },
+        next: () => recordMetrics(status.OK),
         error: (err) => {
-          console.log(err);
-          this.prometheusService.incrementGRPCRequestCounter(
-            `${serviceName}.${handlerName}`,
-            getKeyByValue(status, err.code ?? status.UNKNOWN),
-          );
-          this.prometheusService.addGRPCRequestLatencyToHistogram(
-            `${serviceName}.${handlerName}`,
-            (Date.now() - now) / 1000,
-          );
+          const error = err.getError() as any;
+          const [code] = convertHttpExceptionToGrpc(error.name);
+
+          recordMetrics(code);
         },
       }),
     );
