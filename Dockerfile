@@ -28,4 +28,9 @@ WORKDIR /app
 
 COPY --from=builder /app /app
 
+# gRPC healthchecker for docker compose
+ADD https://github.com/grpc-ecosystem/grpc-health-probe/releases/latest/download/grpc_health_probe-linux-amd64 /bin/grpc-health-probe
+
+RUN chmod +x /bin/grpc-health-probe
+
 CMD [ "npm", "run", "start:dev" ]
